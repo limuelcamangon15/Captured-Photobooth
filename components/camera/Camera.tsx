@@ -109,6 +109,12 @@ export default function Camera() {
 
   const [isItalic, setIsItalic] = useState(false);
 
+  const dateToday = new Date().toLocaleDateString("en-PH", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+
   /*
    * -----------------------------------------
    * CAMERA
@@ -434,12 +440,7 @@ export default function Camera() {
         ? "rgba(255, 255, 255, 0.6)"
         : "rgba(17, 17, 17, 0.6)";
     ctx.fillText(
-      "Made with Captured · " +
-        new Date().toLocaleDateString("en-PH", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        }),
+      "Made with Captured · " + dateToday,
       width / 2,
       height - textArea / 2 + 8
     );
@@ -514,7 +515,7 @@ export default function Camera() {
                   </p>
 
                   <p className={`text-[7px] tracking-tighter opacity-50`}>
-                    Made with captured.
+                    Made with Captured · {dateToday}
                   </p>
                 </div>
               </div>
