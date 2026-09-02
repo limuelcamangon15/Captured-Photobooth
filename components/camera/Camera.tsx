@@ -790,7 +790,7 @@ export default function Camera() {
       <section className="flex min-h-screen items-center justify-center px-4 py-24">
         <div className="w-full max-w-[900px]">
           {/* Camera */}
-          <div className="relative md:h-[650px] sm:aspect-3/4 md:aspect-auto overflow-hidden rounded-[2rem] bg-[#1c1c1e] shadow-2xl">
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2rem] bg-[#1c1c1e] shadow-2xl">
             {cameraError ? (
               <div className="flex h-full items-center justify-center px-8 text-center text-white">
                 <div>
