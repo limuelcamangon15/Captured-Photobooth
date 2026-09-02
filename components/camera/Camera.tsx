@@ -192,23 +192,80 @@ export default function Camera() {
 
     const video = videoRef.current;
 
+    const videoWidth = video.videoWidth;
+    const videoHeight = video.videoHeight;
+
+    if (!videoWidth || !videoHeight) return;
+
+    // --------------------------------
+    // FORCE 4:3 OUTPUT
+    // --------------------------------
+
+    const targetRatio = 4 / 3;
+    const videoRatio = videoWidth / videoHeight;
+
+    let sourceWidth = videoWidth;
+    let sourceHeight = videoHeight;
+    let sourceX = 0;
+    let sourceY = 0;
+
+    if (videoRatio > targetRatio) {
+      // Camera is wider than 4:3.
+      // Crop the left and right sides.
+      sourceWidth = videoHeight * targetRatio;
+      sourceX = (videoWidth - sourceWidth) / 2;
+    } else if (videoRatio < targetRatio) {
+      // Camera is taller than 4:3.
+      // Crop the top and bottom.
+      sourceHeight = videoWidth / targetRatio;
+      sourceY = (videoHeight - sourceHeight) / 2;
+    }
+
+    // --------------------------------
+    // OUTPUT SIZE
+    // --------------------------------
+
     const canvas = document.createElement("canvas");
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    canvas.width = 1440;
+    canvas.height = 1080;
 
     const context = canvas.getContext("2d");
 
     if (!context) return;
 
-    // Mirror the captured image.
+    // --------------------------------
+    // MIRROR
+    // --------------------------------
+
     context.translate(canvas.width, 0);
     context.scale(-1, 1);
 
-    // Apply selected filter.
+    // --------------------------------
+    // FILTER
+    // --------------------------------
+
     context.filter = activeFilter?.value ?? "none";
 
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // --------------------------------
+    // DRAW CROPPED 4:3 IMAGE
+    // --------------------------------
+
+    context.drawImage(
+      video,
+      sourceX,
+      sourceY,
+      sourceWidth,
+      sourceHeight,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    // --------------------------------
+    // SAVE
+    // --------------------------------
 
     const image = canvas.toDataURL("image/jpeg", 0.9);
 
